@@ -1,0 +1,19 @@
+{
+  "name": "soccer-alert-twitter",
+  "version": "1.0.0",
+  "description": "Twitter bot that will show live score of great championship",
+  "main": "main.ts",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "dev":"nodemon main.ts"
+  },
+  "author": "Zakichanu",
+  "license": "ISC",
+  "dependencies": {
+    "dotenv": "^16.0.0",
+    "twitter-api-v2": "^1.11.0"
+  },
+  "devDependencies": {
+    "@types/node": "^17.0.21"
+  }
+}
