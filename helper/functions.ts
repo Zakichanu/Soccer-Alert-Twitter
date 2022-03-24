@@ -55,4 +55,8 @@ async function getLiveScore() {
 
 }
 
+async function getMatchOfTheDay(){
+    
+}
+
 export default { executeRequest, getLiveScore };
