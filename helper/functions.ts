@@ -1,6 +1,7 @@
 import dotenv from 'dotenv';
 dotenv.config();
 import rp from 'request-promise';
+import constants from './constants';
 
 
 
@@ -55,4 +56,25 @@ async function getLiveScore() {
 
 }
 
-export default { executeRequest, getLiveScore };
+
+// Function to call api for MatchResult
+async function getMatchResult(idLeague: number) {
+    try {
+        var params = {
+            date: new Date().toISOString().slice(0, 10) as string,
+            league: idLeague.toString() as string, 
+            season: constants.currentSeason.toString() as string
+        }
+        console.log(params)
+        let body = await executeRequest('GET', 'https://api-football-v1.p.rapidapi.com/v3/fixtures', params, 'api-football-v1.p.rapidapi.com', process.env.RAPID_API_KEY!)
+
+        return Promise.all(body.response as Array<any>);
+
+    } catch (error) {
+        throw error;
+    }
+
+
+}
+
+export default { executeRequest, getLiveScore, getMatchResult };

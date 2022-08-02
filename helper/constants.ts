@@ -53,6 +53,6 @@ const laLiga = {
     
 }
 
-const currentSeason: number = 2021
+const currentSeason: number = 2022
 
 export default {premierLeague, laLiga, currentSeason, ligue1, ucl, europaLeague, serieA, bundesliga}
