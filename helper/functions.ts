@@ -48,7 +48,7 @@ async function getLiveScore() {
     try {
         let body = await executeRequest('GET', 'https://api-football-v1.p.rapidapi.com/v3/fixtures', { live: 'all' }, 'api-football-v1.p.rapidapi.com', process.env.RAPID_API_KEY!)
 
-        return body.response as Array<any>;
+        return Promise.all(body.response as Array<any>);
 
     } catch (error) {
         throw error;
@@ -65,7 +65,6 @@ async function getMatchResult(idLeague: number) {
             league: idLeague.toString() as string, 
             season: constants.currentSeason.toString() as string
         }
-        console.log(params)
         let body = await executeRequest('GET', 'https://api-football-v1.p.rapidapi.com/v3/fixtures', params, 'api-football-v1.p.rapidapi.com', process.env.RAPID_API_KEY!)
 
         return Promise.all(body.response as Array<any>);
