@@ -19,7 +19,7 @@ import constants from './helper/constants';
     for (let index = 0; index < fixtures.length; index++) {
       const element = fixtures[index];
       console.log(element.teams)
-      await userClient.v2.tweet(element.teams.home.name + ' ' + element.goals.home + ' - ' + element.goals.away + ' ' + element.teams.away.name);
+      //await userClient.v2.tweet(element.teams.home.name + ' ' + element.goals.home + ' - ' + element.goals.away + ' ' + element.teams.away.name);
 
     }
 

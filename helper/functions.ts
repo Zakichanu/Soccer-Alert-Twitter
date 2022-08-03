@@ -18,8 +18,8 @@ async function executeRequest(method: string, url: string, qs: any, headersHostV
             url: url,
             qs: qs,
             headers: {
-                'X-RapidAPI-Host': headersHostValue,
-                'X-RapidAPI-Key': headersTokenValue,
+                'x-rapidapi-host': headersHostValue,
+                'x-apisports-key': headersTokenValue,
                 useQueryString: true
             },
             json: true,
@@ -28,12 +28,12 @@ async function executeRequest(method: string, url: string, qs: any, headersHostV
         await rp(options)
             .then(function (repos) {
                 bodyToGet = repos
+
             })
             .catch(function (err) {
                 throw new Error;
             });
             
-
         return bodyToGet;
         
 
@@ -46,7 +46,7 @@ async function executeRequest(method: string, url: string, qs: any, headersHostV
 // Function to call api for LiveScore
 async function getLiveScore() {
     try {
-        let body = await executeRequest('GET', 'https://api-football-v1.p.rapidapi.com/v3/fixtures', { live: 'all' }, 'api-football-v1.p.rapidapi.com', process.env.RAPID_API_KEY!)
+        let body = await executeRequest('GET', 'https://v3.football.api-sports.io/fixtures', { live: 'all' }, 'v3.football.api-sports.io', process.env.RAPID_API_KEY!)
 
         return Promise.all(body.response as Array<any>);
 
@@ -66,7 +66,7 @@ async function getMatchResult(idLeague: number) {
             season: constants.currentSeason.toString() as string
         }
         console.log({params})
-        let body = await executeRequest('GET', 'https://api-football-v1.p.rapidapi.com/v3/fixtures', params, 'api-football-v1.p.rapidapi.com', process.env.RAPID_API_KEY!)
+        let body = await executeRequest('GET', 'https://v3.football.api-sports.io/v3/fixtures', params, 'v3.football.api-sports.io', process.env.RAPID_API_KEY!)
 
         return Promise.all(body.response as Array<any>);
 
