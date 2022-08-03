@@ -85,43 +85,43 @@ interface time{
 // constants for each league
 const premierLeague = {
     "id": 39 as number,
-    "fixtureOfTheDay": Array<fixture>()
+    "fixtureOfTheDay": Array<fixtureResponse>()
     
 }
 
 const ligue1 = {
     "id": 61 as number,
-    "fixtureOfTheDay": Array<fixture>()
+    "fixtureOfTheDay": Array<fixtureResponse>()
     
 }
 
 const ucl = {
     "id": 2 as number,
-    "fixtureOfTheDay": Array<fixture>()
+    "fixtureOfTheDay": Array<fixtureResponse>()
     
 }
 
 const europaLeague = {
     "id": 3 as number,
-    "fixtureOfTheDay": Array<fixture>()
+    "fixtureOfTheDay": Array<fixtureResponse>()
     
 }
 
 const serieA = {
     "id": 135 as number,
-    "fixtureOfTheDay": Array<fixture>()
+    "fixtureOfTheDay": Array<fixtureResponse>()
     
 }
 
 const bundesliga = {
     "id": 78 as number,
-    "fixtureOfTheDay": Array<fixture>()
+    "fixtureOfTheDay": Array<fixtureResponse>()
     
 }
 
 const laLiga = {
     "id": 140 as number,
-    "fixtureOfTheDay": Array<fixture>()
+    "fixtureOfTheDay": Array<fixtureResponse>()
     
 }
 //////////////////////////////////////////////////////////////////////////////////////////////

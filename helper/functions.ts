@@ -4,7 +4,10 @@ import rp from 'request-promise';
 import constants from './constants';
 
 
-
+// Wait method
+const wait = async (ms: number) => {
+    return new Promise(resolve => setTimeout(resolve, ms));
+}
 
 
 // Calling API
@@ -46,7 +49,7 @@ async function executeRequest(method: string, url: string, qs: any, headersHostV
 // Function to call api for LiveScore
 async function getLiveScore() {
     try {
-        let body = await executeRequest('GET', 'https://v3.football.api-sports.io/fixtures', { live: 'all' }, 'v3.football.api-sports.io', process.env.RAPID_API_KEY!)
+        let body = await executeRequest('GET', 'https://v3.football.api-sports.io/fixtures', { live: 'all', timezone: 'Europe/Paris' }, 'v3.football.api-sports.io', process.env.RAPID_API_KEY!)
 
         return Promise.all(body.response as Array<any>);
 
@@ -61,12 +64,13 @@ async function getLiveScore() {
 async function getMatchResult(idLeague: number) {
     try {
         var params = {
-            date: new Date().toISOString().slice(0, 10) as string,
+            date: new Date().toLocaleDateString("fr-CA", {timeZone: "Europe/Paris"}).slice(0, 10) as string,
             league: idLeague.toString() as string, 
-            season: constants.currentSeason.toString() as string
+            season: constants.currentSeason.toString() as string,
+            timezone: 'Europe/Paris'
         }
         console.log({params})
-        let body = await executeRequest('GET', 'https://v3.football.api-sports.io/v3/fixtures', params, 'v3.football.api-sports.io', process.env.RAPID_API_KEY!)
+        let body = await executeRequest('GET', 'https://v3.football.api-sports.io/fixtures', params, 'v3.football.api-sports.io', process.env.RAPID_API_KEY!)
 
         return Promise.all(body.response as Array<any>);
 

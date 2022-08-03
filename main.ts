@@ -3,6 +3,7 @@ import dotenv from 'dotenv';
 dotenv.config();
 import functions from './helper/functions';
 import constants, { fixtureResponse } from './helper/constants';
+import FixtureResult from './src/FixtureResult';
 
 (async () => {
   try {
@@ -14,20 +15,15 @@ import constants, { fixtureResponse } from './helper/constants';
       accessSecret: process.env.TWITTER_ACCESS_TOKEN_SECRET!,
     });
 
-    let fixtures: Array<fixtureResponse> = await functions.getLiveScore();
-    
-    
-    // for (let index = 0; index < fixtures.length; index++) {
-    //   const element = fixtures[index];
-    //   console.log(element.events );
-    //   //await userClient.v2.tweet(element.teams.home.name + ' ' + element.goals.home + ' - ' + element.goals.away + ' ' + element.teams.away.name);
-
+    // let fixtures: Array<fixtureResponse> = await functions.getLiveScore();
+    // for (const key of fixtures) {
+    //   console.log(key);
+    //   //await userClient.v2.tweet(key.teams.home.name + ' ' + key.goals.home + ' - ' + key.goals.away + ' ' + key.teams.away.name);
     // }
-    for (const key of fixtures) {
-      console.log(key);
-    }
-
     
+    FixtureResult.fixturePreview();
+    FixtureResult.fixtureResult();
+
   } catch (error) {
     throw error;
   }
