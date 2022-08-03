@@ -14,7 +14,7 @@ import constants from './helper/constants';
       accessSecret: process.env.TWITTER_ACCESS_TOKEN_SECRET!,
     });
 
-    let fixtures: Array<any> = await functions.getMatchResult(constants.premierLeague.id);
+    let fixtures: Array<any> = await functions.getLiveScore();
     
     for (let index = 0; index < fixtures.length; index++) {
       const element = fixtures[index];
