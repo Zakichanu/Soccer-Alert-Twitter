@@ -4,7 +4,7 @@ import functions from '../helper/functions';
 
 // Function to retrieve the match of the day
 const fixturePreview = () => {
-    cron.schedule('0 10 * * *', async () => {
+    cron.schedule('38 22 * * *', async () => {
         console.log("It's 10 o'clock !!! Match preview of the day...");
 
         callResult();
@@ -27,6 +27,8 @@ const callResult = async () => {
         console.log("Premier League...")
         let premierLeagueFixtures : Array<fixtureResponse> = await functions.getMatchResult(constants.premierLeague.id);
         constants.premierLeague.fixtureOfTheDay = premierLeagueFixtures;
+
+        console.log(constants.premierLeague.fixtureOfTheDay);
 
         console.log("Ligue 1...")
         let ligue1Fixtures : Array<fixtureResponse> = await functions.getMatchResult(constants.ligue1.id);

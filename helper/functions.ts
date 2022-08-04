@@ -47,9 +47,33 @@ async function executeRequest(method: string, url: string, qs: any, headersHostV
 }
 
 // Function to call api for LiveScore
-async function getLiveScore() {
+async function getLiveScore(idLeague: number) {
     try {
-        let body = await executeRequest('GET', 'https://v3.football.api-sports.io/fixtures', { live: 'all', timezone: 'Europe/Paris' }, 'v3.football.api-sports.io', process.env.RAPID_API_KEY!)
+        var params = {
+            live: 'all',
+            league: idLeague, 
+            season: constants.currentSeason.toString() as string,
+            timezone: 'Europe/Paris'
+        }
+        let body = await executeRequest('GET', 'https://v3.football.api-sports.io/fixtures', params, 'v3.football.api-sports.io', process.env.RAPID_API_KEY!)
+
+        return Promise.all(body.response as Array<any>);
+
+    } catch (error) {
+        throw error;
+    }
+
+}
+
+// Function to call api for LiveScore
+async function getLiveScoreAll() {
+    try {
+        var params = {
+            live: 'all',
+            season: constants.currentSeason.toString() as string,
+            timezone: 'Europe/Paris'
+        }
+        let body = await executeRequest('GET', 'https://v3.football.api-sports.io/fixtures', params, 'v3.football.api-sports.io', process.env.RAPID_API_KEY!)
 
         return Promise.all(body.response as Array<any>);
 
@@ -65,7 +89,7 @@ async function getMatchResult(idLeague: number) {
     try {
         var params = {
             date: new Date().toLocaleDateString("fr-CA", {timeZone: "Europe/Paris"}).slice(0, 10) as string,
-            league: idLeague.toString() as string, 
+            league: idLeague, 
             season: constants.currentSeason.toString() as string,
             timezone: 'Europe/Paris'
         }
@@ -81,4 +105,4 @@ async function getMatchResult(idLeague: number) {
 
 }
 
-export default { executeRequest, getLiveScore, getMatchResult };
+export default { executeRequest, getLiveScore, getMatchResult, getLiveScoreAll, wait };

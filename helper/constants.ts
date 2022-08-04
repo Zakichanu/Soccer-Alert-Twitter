@@ -62,7 +62,7 @@ interface status {
     elapsed: number;
 }
 
-interface events{
+export interface events{
     time: time;
     team: team;
     player: player;
