@@ -93,7 +93,6 @@ async function getMatchResult(idLeague: number) {
             season: constants.currentSeason.toString() as string,
             timezone: 'Europe/Paris'
         }
-        console.log({params})
         let body = await executeRequest('GET', 'https://v3.football.api-sports.io/fixtures', params, 'v3.football.api-sports.io', process.env.RAPID_API_KEY!)
 
         return Promise.all(body.response as Array<any>);
