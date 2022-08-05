@@ -4,18 +4,24 @@ import functions from '../helper/functions';
 
 const liveScore = () => {
     console.log("Running live score analysis...");
+    console.log("Live Score for : " + constants.premierLeague.id);
     callLiveScore(constants.premierLeague.fixtureOfTheDay, constants.premierLeague.id);
+    console.log("Live Score for : " + constants.ligue1.id);
     callLiveScore(constants.ligue1.fixtureOfTheDay, constants.ligue1.id);
+    console.log("Live Score for : " + constants.bundesliga.id);
     callLiveScore(constants.bundesliga.fixtureOfTheDay, constants.bundesliga.id);
+    console.log("Live Score for : " + constants.laLiga.id);
     callLiveScore(constants.laLiga.fixtureOfTheDay, constants.laLiga.id);
+    console.log("Live Score for : " + constants.ucl.id);
     callLiveScore(constants.ucl.fixtureOfTheDay, constants.ucl.id);
+    console.log("Live Score for : " + constants.europaLeague.id);
     callLiveScore(constants.europaLeague.fixtureOfTheDay, constants.europaLeague.id);
+    console.log("Live Score for : " + constants.serieA.id);
     callLiveScore(constants.serieA.fixtureOfTheDay, constants.serieA.id);
 }
 
 const callLiveScore = async (matchOfTheDay: Array<fixtureResponse>, idLeague: number) => {
     try {
-        console.log("Live Score for : " + idLeague);
         let triggerCall: boolean = false;
         for (const match of matchOfTheDay) {
             const currentDate: Date = new Date();
