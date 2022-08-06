@@ -1,39 +1,43 @@
 import cron from 'node-cron';
 import constants, { fixtureResponse, events } from '../helper/constants';
 import functions from '../helper/functions';
-
 const liveScore = () => {
-    console.log("Running live score analysis...");
-    console.log("Live Score for : " + constants.premierLeague.id);
-    callLiveScore(constants.premierLeague.fixtureOfTheDay, constants.premierLeague.id);
-    console.log("Live Score for : " + constants.ligue1.id);
-    callLiveScore(constants.ligue1.fixtureOfTheDay, constants.ligue1.id);
-    console.log("Live Score for : " + constants.bundesliga.id);
-    callLiveScore(constants.bundesliga.fixtureOfTheDay, constants.bundesliga.id);
-    console.log("Live Score for : " + constants.laLiga.id);
-    callLiveScore(constants.laLiga.fixtureOfTheDay, constants.laLiga.id);
-    console.log("Live Score for : " + constants.ucl.id);
-    callLiveScore(constants.ucl.fixtureOfTheDay, constants.ucl.id);
-    console.log("Live Score for : " + constants.europaLeague.id);
-    callLiveScore(constants.europaLeague.fixtureOfTheDay, constants.europaLeague.id);
-    console.log("Live Score for : " + constants.serieA.id);
-    callLiveScore(constants.serieA.fixtureOfTheDay, constants.serieA.id);
+    try {
+        console.log("Running live score analysis...");
+        console.log("Live Score for : " + constants.premierLeague.id);
+        callLiveScore(constants.premierLeague.fixtureOfTheDay, constants.premierLeague.id);
+        // console.log("Live Score for : " + constants.ligue1.id);
+        // callLiveScore(constants.ligue1.fixtureOfTheDay, constants.ligue1.id);
+        // console.log("Live Score for : " + constants.bundesliga.id);
+        // callLiveScore(constants.bundesliga.fixtureOfTheDay, constants.bundesliga.id);
+        // console.log("Live Score for : " + constants.laLiga.id);
+        // callLiveScore(constants.laLiga.fixtureOfTheDay, constants.laLiga.id);
+        // console.log("Live Score for : " + constants.ucl.id);
+        // callLiveScore(constants.ucl.fixtureOfTheDay, constants.ucl.id);
+        // console.log("Live Score for : " + constants.europaLeague.id);
+        // callLiveScore(constants.europaLeague.fixtureOfTheDay, constants.europaLeague.id);
+        // console.log("Live Score for : " + constants.serieA.id);
+        // callLiveScore(constants.serieA.fixtureOfTheDay, constants.serieA.id);
+    } catch (error) {
+        throw error;
+    }
 }
 
 const callLiveScore = async (matchOfTheDay: Array<fixtureResponse>, idLeague: number) => {
     try {
         let triggerCall: boolean = false;
+
         for (const match of matchOfTheDay) {
             const currentDate: Date = new Date();
             const matchDate: Date = new Date(match.fixture.date);
             if (currentDate >= matchDate && (match.fixture.status.short === 'NS' || match.fixture.status.short === '1H' || match.fixture.status.short == 'HT' || match.fixture.status.short == '2H'
                 || match.fixture.status.short == 'ET' || match.fixture.status.short == 'P' || match.fixture.status.short == 'BT')) {
+
                 triggerCall = true;
                 break;
             }
         }
         if (triggerCall) {
-            console.log({triggerCall})
             let fixtures: Array<fixtureResponse> = await functions.getLiveScore(idLeague);
 
             for (const iterator of fixtures) {
@@ -41,17 +45,15 @@ const callLiveScore = async (matchOfTheDay: Array<fixtureResponse>, idLeague: nu
                 if (matchOFDAssociate) {
                     // Managing events
                     manageEvents(matchOFDAssociate, iterator)
-
                     const indexOfMatchToUpdate: number = matchOfTheDay.findIndex(fixture => fixture === matchOFDAssociate);
                     matchOfTheDay[indexOfMatchToUpdate] = iterator;
-                    console.log(iterator.teams.home + ' ' + iterator.goals.home + ' - ' + iterator.goals.away + ' ' + iterator.teams.away);
                 } else {
                     console.log('No match found');
                 }
             }
         }
-        
-        functions.wait(90000).then(async () => callLiveScore(matchOfTheDay, idLeague));
+
+        functions.wait(90000).then(() => callLiveScore(functions.getMatchOftheDay(idLeague), idLeague));
     } catch (error) {
         throw error;
     }
@@ -60,9 +62,9 @@ const callLiveScore = async (matchOfTheDay: Array<fixtureResponse>, idLeague: nu
 const manageEvents = async (existantMatch: fixtureResponse, matchLive: fixtureResponse) => {
     try {
         // New goal
-        const allGoalsLive = matchLive.events.map(event => event.type === 'Goal') as unknown as Array<events>;
-        const allGoalsMatch = existantMatch.events.map(event => event.type === 'Goal') as unknown as Array<events>;
-        if (allGoalsLive.length > allGoalsMatch.length) {
+        const allGoalsLive = matchLive.events?.filter(event => event.type === 'Goal') as unknown as Array<events>;
+        const allGoalsMatch = existantMatch.events?.filter(event => event.type === 'Goal') as unknown as Array<events>;
+        if ((allGoalsMatch && allGoalsLive.length > allGoalsMatch.length) || (!allGoalsMatch && allGoalsLive.length > 0)) {
             if (allGoalsLive[allGoalsLive.length - 1].detail === 'Own Goal') {
                 console.log(allGoalsLive[allGoalsLive.length - 1].time.elapsed + "' ➡️ Own Goal! From : " + allGoalsLive[allGoalsLive.length - 1].player.name + " Score : " + matchLive.teams.home.name + ' ' + matchLive.goals.home + " - " + matchLive.goals.away + ' ' + matchLive.teams.away.name);
             }
@@ -76,18 +78,16 @@ const manageEvents = async (existantMatch: fixtureResponse, matchLive: fixtureRe
                 console.log(allGoalsLive[allGoalsLive.length - 1].time.elapsed + "' ➡️ Missed Penalty! From : " + allGoalsLive[allGoalsLive.length - 1].player.name + " Score : " + matchLive.teams.home.name + ' ' + matchLive.goals.home + " - " + matchLive.goals.away + ' ' + matchLive.teams.away.name);
             }
         }
-
         // New red card
-        const allRedCardsLive = matchLive.events.map(event => event.detail === 'Red Card') as unknown as Array<events>;
-        const allRedCardsMatch = existantMatch.events.map(event => event.detail === 'Red Card') as unknown as Array<events>;
-        if (allRedCardsLive.length > allRedCardsMatch.length) {
+        const allRedCardsLive = matchLive.events?.filter(event => event.detail === 'Red Card') as unknown as Array<events>;
+        const allRedCardsMatch = existantMatch.events?.filter(event => event.detail === 'Red Card') as unknown as Array<events>;
+        if ((allRedCardsMatch && allRedCardsLive.length > allRedCardsMatch.length) || (!allRedCardsMatch && allRedCardsLive.length > 0)) {
             console.log(allRedCardsLive[allRedCardsLive.length - 1].time.elapsed + "' ➡️ Red Card! From : " + allRedCardsLive[allRedCardsLive.length - 1].player.name + " Score : " + matchLive.teams.home.name + ' ' + matchLive.goals.home + " - " + matchLive.goals.away + ' ' + matchLive.teams.away.name);
         }
-
         // VAR
-        const allVARLive = matchLive.events.map(event => event.detail === 'Goal cancelled') as unknown as Array<events>;
-        const allVARMatch = existantMatch.events.map(event => event.detail === 'Goal cancelled') as unknown as Array<events>;
-        if (allVARLive.length > allVARMatch.length) {
+        const allVARLive = matchLive.events?.filter(event => event.detail === 'Goal cancelled') as unknown as Array<events>;
+        const allVARMatch = existantMatch.events?.filter(event => event.detail === 'Goal cancelled') as unknown as Array<events>;
+        if ((allVARMatch && allVARLive.length > allVARMatch.length) || (!allVARMatch && allVARLive.length > 0)) {
             console.log(allVARLive[allVARLive.length - 1].time.elapsed + "' ➡️ Goal cancelled! From : " + allVARLive[allVARLive.length - 1].player.name + " Score : " + matchLive.teams.home.name + ' ' + matchLive.goals.home + " - " + matchLive.goals.away + ' ' + matchLive.teams.away.name);
         }
 
@@ -107,4 +107,4 @@ const manageEvents = async (existantMatch: fixtureResponse, matchLive: fixtureRe
     }
 }
 
-export default {liveScore}
+export default { liveScore }

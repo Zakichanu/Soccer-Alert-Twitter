@@ -1,19 +1,23 @@
 import dotenv from 'dotenv';
 dotenv.config();
 import rp from 'request-promise';
-import constants from './constants';
+import constants, { fixtureResponse } from './constants';
 
 
 // Wait method
 const wait = async (ms: number) => {
-    return new Promise(resolve => setTimeout(resolve, ms));
+    try {
+        return new Promise(resolve => setTimeout(resolve, ms));
+    } catch (error) {
+        throw error;
+    }
+    
 }
 
 
 // Calling API
 async function executeRequest(method: string, url: string, qs: any, headersHostValue: string, headersTokenValue: string) {
     try {
-
         var bodyToGet: any;
 
         const options = {
@@ -104,4 +108,29 @@ async function getMatchResult(idLeague: number) {
 
 }
 
-export default { executeRequest, getLiveScore, getMatchResult, getLiveScoreAll, wait };
+function getMatchOftheDay (idLeague: number) : Array<fixtureResponse> {
+    if(idLeague === constants.premierLeague.id){
+        return constants.premierLeague.fixtureOfTheDay;
+    }
+    else if(idLeague === constants.laLiga.id){
+        return constants.laLiga.fixtureOfTheDay;
+    }
+    else if(idLeague === constants.bundesliga.id){
+        return constants.bundesliga.fixtureOfTheDay;
+    }
+    else if(idLeague === constants.serieA.id){
+        return constants.serieA.fixtureOfTheDay;
+    }
+    else if(idLeague === constants.ligue1.id){
+        return constants.ligue1.fixtureOfTheDay;
+    }
+    else if(idLeague === constants.ucl.id){
+        return constants.ucl.fixtureOfTheDay;
+    }
+    else if(idLeague === constants.europaLeague.id){
+        return constants.europaLeague.fixtureOfTheDay;
+    };
+    return [];
+}
+
+export default { executeRequest, getLiveScore, getMatchResult, getLiveScoreAll, wait, getMatchOftheDay };
