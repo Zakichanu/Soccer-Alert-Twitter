@@ -64,7 +64,7 @@ const manageEvents = async (existantMatch: fixtureResponse, matchLive: fixtureRe
         // New goal
         const allGoalsLive = matchLive.events?.filter(event => event.type === 'Goal') as unknown as Array<events>;
         const allGoalsMatch = existantMatch.events?.filter(event => event.type === 'Goal') as unknown as Array<events>;
-        if ((allGoalsMatch && allGoalsLive.length > allGoalsMatch.length) || (!allGoalsMatch && allGoalsLive.length > 0)) {
+        if ((allGoalsMatch && allGoalsLive.length > allGoalsMatch.length && matchLive.goals !== existantMatch.goals) || (!allGoalsMatch && allGoalsLive.length > 0 && matchLive.goals !== existantMatch.goals)) {
             if (allGoalsLive[allGoalsLive.length - 1].detail === 'Own Goal') {
                 console.log(allGoalsLive[allGoalsLive.length - 1].time.elapsed + "' ➡️ Own Goal! From : " + allGoalsLive[allGoalsLive.length - 1].player.name + " Score : " + matchLive.teams.home.name + ' ' + matchLive.goals.home + " - " + matchLive.goals.away + ' ' + matchLive.teams.away.name);
             }
