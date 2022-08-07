@@ -104,8 +104,21 @@ async function getMatchResult(idLeague: number) {
     } catch (error) {
         throw error;
     }
+}
 
+async function getOneMatchResult(idFixture: number) : Promise<fixtureResponse> {
+    try {
+        var params = {
+            id: idFixture, 
+            timezone: 'Europe/Paris'
+        }
+        let body = await executeRequest('GET', 'https://v3.football.api-sports.io/fixtures', params, 'v3.football.api-sports.io', process.env.RAPID_API_KEY!)
+        
+        return body.response[0] as fixtureResponse;
 
+    } catch (error) {
+        throw error;
+    }
 }
 
 function getMatchOftheDay (idLeague: number) : Array<fixtureResponse> {
@@ -133,4 +146,4 @@ function getMatchOftheDay (idLeague: number) : Array<fixtureResponse> {
     return [];
 }
 
-export default { executeRequest, getLiveScore, getMatchResult, getLiveScoreAll, wait, getMatchOftheDay };
+export default { executeRequest, getOneMatchResult, getLiveScore, getMatchResult, getLiveScoreAll, wait, getMatchOftheDay };

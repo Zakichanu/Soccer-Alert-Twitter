@@ -1,3 +1,4 @@
+import { waitForDebugger } from 'inspector';
 import cron from 'node-cron';
 import constants, { fixtureResponse, events } from '../helper/constants';
 import functions from '../helper/functions';
@@ -6,6 +7,7 @@ const liveScore = () => {
         console.log("Running live score analysis...");
         console.log("Live Score for : " + constants.premierLeague.id);
         callLiveScore(constants.premierLeague.fixtureOfTheDay, constants.premierLeague.id);
+        verifyEndOfMatch(constants.premierLeague.fixtureOfTheDay);
         // console.log("Live Score for : " + constants.ligue1.id);
         // callLiveScore(constants.ligue1.fixtureOfTheDay, constants.ligue1.id);
         // console.log("Live Score for : " + constants.bundesliga.id);
@@ -100,6 +102,26 @@ const manageEvents = async (existantMatch: fixtureResponse, matchLive: fixtureRe
             console.log('Beginning of the match !! Score: ' + matchLive.teams.home.name + ' ' + matchLive.goals.home + " - " + matchLive.goals.away + ' ' + matchLive.teams.away.name);
         } else if (matchLive.fixture.status.short === 'FT' && existantMatch.fixture.status.short === '2H') {
             console.log('Fulltime !! Score: ' + matchLive.teams.home.name + ' ' + matchLive.goals.home + " - " + matchLive.goals.away + ' ' + matchLive.teams.away.name);
+        }
+    } catch (errors) {
+        throw errors;
+
+    }
+}
+
+const verifyEndOfMatch = async (matchsLive: Array<fixtureResponse>) => {
+    try {
+        for (let match of matchsLive) {
+            if(match.fixture.status.elapsed === 90 && match.fixture.status.short === "2H") {
+                const newMatchInfo : fixtureResponse = await functions.getOneMatchResult(match.fixture.id);
+                if(newMatchInfo.fixture.status.short === "FT") {
+                    console.log('Fulltime !! Score: ' + newMatchInfo.teams.home.name + ' ' + newMatchInfo.goals.home + " - " + newMatchInfo.goals.away + ' ' + newMatchInfo.teams.away.name);
+                    match = newMatchInfo;
+                }else {
+                    await functions.wait(90000).then(() => verifyEndOfMatch(functions.getMatchOftheDay(match.league.id)));
+                }
+            }
+            
         }
     } catch (errors) {
         throw errors;
