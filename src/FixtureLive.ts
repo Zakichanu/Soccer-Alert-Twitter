@@ -7,7 +7,7 @@ const liveScore = () => {
         console.log("Running live score analysis...");
         console.log("Live Score for : " + constants.premierLeague.id);
         callLiveScore(constants.premierLeague.fixtureOfTheDay, constants.premierLeague.id);
-        verifyEndOfMatch(constants.premierLeague.fixtureOfTheDay);
+        verifyEndOfMatch(constants.premierLeague.fixtureOfTheDay, constants.premierLeague.id);
         // console.log("Live Score for : " + constants.ligue1.id);
         // callLiveScore(constants.ligue1.fixtureOfTheDay, constants.ligue1.id);
         // console.log("Live Score for : " + constants.bundesliga.id);
@@ -39,6 +39,7 @@ const callLiveScore = async (matchOfTheDay: Array<fixtureResponse>, idLeague: nu
                 break;
             }
         }
+        console.log({ triggerCall });
         if (triggerCall) {
             let fixtures: Array<fixtureResponse> = await functions.getLiveScore(idLeague);
 
@@ -109,20 +110,25 @@ const manageEvents = async (existantMatch: fixtureResponse, matchLive: fixtureRe
     }
 }
 
-const verifyEndOfMatch = async (matchsLive: Array<fixtureResponse>) => {
+const verifyEndOfMatch = async (matchsLive: Array<fixtureResponse>, idLeague: number) => {
     try {
-        for (let match of matchsLive) {
-            if(match.fixture.status.elapsed === 90 && match.fixture.status.short === "2H") {
-                const newMatchInfo : fixtureResponse = await functions.getOneMatchResult(match.fixture.id);
-                if(newMatchInfo.fixture.status.short === "FT") {
-                    console.log('Fulltime !! Score: ' + newMatchInfo.teams.home.name + ' ' + newMatchInfo.goals.home + " - " + newMatchInfo.goals.away + ' ' + newMatchInfo.teams.away.name);
-                    match = newMatchInfo;
-                }else {
-                    await functions.wait(90000).then(() => verifyEndOfMatch(functions.getMatchOftheDay(match.league.id)));
+        if(matchsLive.length > 0) {
+            for (let match of matchsLive) {
+                console.log(match.fixture.status.elapsed + " " + match.fixture.status.short)
+                if(match.fixture.status.elapsed >= 90 && match.fixture.status.short === "2H") {
+                    const newMatchInfo : fixtureResponse = await functions.getOneMatchResult(match.fixture.id);
+                    if(newMatchInfo.fixture.status.short === "FT") {
+                        console.log('Fulltime !! Score: ' + newMatchInfo.teams.home.name + ' ' + newMatchInfo.goals.home + " - " + newMatchInfo.goals.away + ' ' + newMatchInfo.teams.away.name);
+                        const indexOfMatchToUpdate: number = matchsLive.findIndex(fixture => fixture === match);
+                        matchsLive[indexOfMatchToUpdate] = newMatchInfo;
+                    }
                 }
+                
             }
-            
         }
+
+        await functions.wait(90000).then(() => verifyEndOfMatch(functions.getMatchOftheDay(idLeague), idLeague));
+        
     } catch (errors) {
         throw errors;
 

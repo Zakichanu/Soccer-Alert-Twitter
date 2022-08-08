@@ -11,4 +11,4 @@ Your soccer companion on twitter. Tweeting live and final score of the day and s
 # Problematics
 
 - [x] Don't tweet when an event is changed
-- [ ] See how pass the FT parameter
+- [x] See how pass the FT parameter

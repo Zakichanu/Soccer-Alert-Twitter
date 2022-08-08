@@ -84,7 +84,7 @@ interface time{
 
 // constants for each league
 const premierLeague = {
-    "id": 39 as number,
+    "id": 569 as number,
     "fixtureOfTheDay": Array<fixtureResponse>()
     
 }
