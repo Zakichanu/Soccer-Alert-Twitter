@@ -7,3 +7,8 @@ Your soccer companion on twitter. Tweeting live and final score of the day and s
 ## Architecture of application
 
 ![image](https://user-images.githubusercontent.com/49374657/159812952-60e81a32-6682-4403-83ca-40b75bf25f0f.png)
+
+# Problematics
+
+- [x] Don't tweet when an event is changed
+- [x] See how pass the FT parameter

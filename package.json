@@ -5,13 +5,15 @@
   "main": "main.ts",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "dev": "ts-node main.ts"
+    "dev": "ts-node main.ts",
+    "start": "ts-node main.ts"
   },
   "author": "Zakichanu",
   "license": "ISC",
   "dependencies": {
     "@types/request": "^2.48.8",
     "dotenv": "^16.0.0",
+    "node-cron": "^3.0.1",
     "request": "^2.88.2",
     "request-promise": "^4.2.6",
     "twitter-api-v2": "^1.11.0",
@@ -19,6 +21,7 @@
   },
   "devDependencies": {
     "@types/node": "^17.0.22",
+    "@types/node-cron": "^3.0.2",
     "@types/request-promise": "^4.1.48"
   }
 }
