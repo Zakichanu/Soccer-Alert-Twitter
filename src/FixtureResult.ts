@@ -4,7 +4,7 @@ import functions from '../helper/functions';
 
 // Function to retrieve the match of the day
 const fixturePreview = () => {
-    cron.schedule('30 18 14 * * *', async () => {
+    cron.schedule('0 10 * * *', async () => {
         console.log("It's 10 o'clock !!! Match preview of the day...");
         callResult();
         

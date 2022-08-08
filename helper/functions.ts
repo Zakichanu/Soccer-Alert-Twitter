@@ -6,12 +6,7 @@ import constants, { fixtureResponse } from './constants';
 
 // Wait method
 const wait = async (ms: number) => {
-    try {
-        return new Promise(resolve => setTimeout(resolve, ms));
-    } catch (error) {
-        throw error;
-    }
-    
+    return new Promise(resolve => setTimeout(resolve, ms));
 }
 
 
