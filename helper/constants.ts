@@ -130,4 +130,7 @@ const laLiga = {
 // Season number
 const currentSeason: number = 2022
 
-export default { premierLeague, laLiga, currentSeason, ligue1, ucl, europaLeague, serieA, bundesliga}
+// Array of all tweets that need to be tweeted
+const listOfTweets = Array<string>();
+
+export default { premierLeague, laLiga, currentSeason, ligue1, ucl, europaLeague, serieA, bundesliga, listOfTweets };

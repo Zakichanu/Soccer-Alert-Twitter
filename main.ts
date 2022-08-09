@@ -1,9 +1,10 @@
 import { TwitterApi } from 'twitter-api-v2';
 import dotenv from 'dotenv';
-import { fixtureResponse } from './helper/constants';
-import functions from './helper/functions';
+import cron from 'node-cron';
 import FixtureResult from './src/FixtureResult';
 import FixtureLive from './src/FixtureLive';
+import constants from './helper/constants';
+import functions from './helper/functions';
 dotenv.config();
 
 (async () => {
@@ -16,16 +17,14 @@ dotenv.config();
   });
 
 
-  // let fixtures: Array<fixtureResponse> = await functions.getLiveScoreAll();
-  // console.log(fixtures[0].fixture.status);
-  // for (const key of fixtures) {
-  //   console.log(key);
-  //   //await userClient.v2.tweet(key.teams.home.name + ' ' + key.goals.home + ' - ' + key.goals.away + ' ' + key.teams.away.name);
-  // }
-  
+  functions.resetArrays();
   FixtureResult.fixturePreview();
   FixtureResult.fixtureResult();
   FixtureLive.liveScore();
+  functions.tweetEveryMinute(userClient);
 
+
+
+  
 
 })();
