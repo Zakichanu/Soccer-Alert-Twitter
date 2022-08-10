@@ -16,11 +16,19 @@ dotenv.config();
     accessSecret: process.env.TWITTER_ACCESS_TOKEN_SECRET!,
   });
 
-
+  // Reseting arrays of fixture of the day
   functions.resetArrays();
+
+  // List of fixtures of the day at the beginning of the day
   FixtureResult.fixturePreview();
+
+  // List of fixtures of the day at the end of the day
   FixtureResult.fixtureResult();
+
+  // Retrieve live score event every 90 seconds
   FixtureLive.liveScore();
+
+  // Check if there is something to tweet
   functions.tweetEveryMinute(userClient);
 
 

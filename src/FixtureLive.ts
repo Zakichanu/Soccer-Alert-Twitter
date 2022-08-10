@@ -9,21 +9,27 @@ const liveScore = () => {
 
     console.log("Live Score for : " + constants.ligue1.id);
     callLiveScore(constants.ligue1.fixtureOfTheDay, constants.ligue1.id);
+    verifyEndOfMatch(constants.ligue1.fixtureOfTheDay, constants.ligue1.id);
 
     console.log("Live Score for : " + constants.bundesliga.id);
     callLiveScore(constants.bundesliga.fixtureOfTheDay, constants.bundesliga.id);
+    verifyEndOfMatch(constants.bundesliga.fixtureOfTheDay, constants.bundesliga.id);
 
     console.log("Live Score for : " + constants.laLiga.id);
     callLiveScore(constants.laLiga.fixtureOfTheDay, constants.laLiga.id);
+    verifyEndOfMatch(constants.laLiga.fixtureOfTheDay, constants.laLiga.id);
 
     console.log("Live Score for : " + constants.ucl.id);
     callLiveScore(constants.ucl.fixtureOfTheDay, constants.ucl.id);
+    verifyEndOfMatch(constants.ucl.fixtureOfTheDay, constants.ucl.id);
 
     console.log("Live Score for : " + constants.europaLeague.id);
     callLiveScore(constants.europaLeague.fixtureOfTheDay, constants.europaLeague.id);
+    verifyEndOfMatch(constants.europaLeague.fixtureOfTheDay, constants.europaLeague.id);
 
     console.log("Live Score for : " + constants.serieA.id);
     callLiveScore(constants.serieA.fixtureOfTheDay, constants.serieA.id);
+    verifyEndOfMatch(constants.serieA.fixtureOfTheDay, constants.serieA.id);
 }
 
 const callLiveScore = async (matchOfTheDay: Array<fixtureResponse>, idLeague: number) => {

@@ -162,9 +162,8 @@ const resetArrays = async () => {
 const tweetEveryMinute = async (userClient: TwitterApi) => {
     cron.schedule('*/1 * * * *', async () => {
         console.log("Tweet every minute...");
-        for (const information of constants.listOfTweets) {
-            await userClient.v2.tweet(information);
-            constants.listOfTweets.shift();
+        while(constants.listOfTweets?.length > 0) {
+            await userClient.v2.tweet(constants.listOfTweets.shift()!);
         }
         console.log("Done !");
     }).start();
