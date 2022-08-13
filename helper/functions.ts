@@ -1,9 +1,9 @@
-import dotenv from 'dotenv';
-dotenv.config();
 import rp from 'request-promise';
 import constants, { fixtureResponse } from './constants';
 import cron from 'node-cron';
 import { TwitterApi } from 'twitter-api-v2';
+import dotenv from 'dotenv';
+dotenv.config();
 
 
 // Wait method
@@ -169,4 +169,15 @@ const tweetEveryMinute = async (userClient: TwitterApi) => {
     }).start();
 }
 
-export default { executeRequest, getOneMatchResult, getLiveScore, getMatchResult, getLiveScoreAll, wait, getMatchOftheDay, resetArrays, tweetEveryMinute };
+// Tweeting thread
+const tweetThread = async (userClient: TwitterApi) => {
+    console.log("Tweet thread...");
+    if(constants.listOfTweetsThread?.length > 0) {
+        await userClient.v2.tweetThread(constants.listOfTweetsThread!);
+    }
+    // Reset array
+    constants.listOfTweetsThread = [];
+    console.log("Done !");
+}
+
+export default { executeRequest, getOneMatchResult, getLiveScore, getMatchResult, getLiveScoreAll, wait, getMatchOftheDay, resetArrays, tweetEveryMinute, tweetThread };
