@@ -145,7 +145,7 @@ function getMatchOftheDay(idLeague: number): Array<fixtureResponse> {
 
 // Resting arrays
 const resetArrays = async () => {
-    cron.schedule('15 0 * * *', async () => {
+    cron.schedule('50 0 * * *', async () => {
         console.log("It's midnight !!! Reset arrays...");
         constants.premierLeague.fixtureOfTheDay = [];
         constants.ligue1.fixtureOfTheDay = [];
@@ -161,11 +161,14 @@ const resetArrays = async () => {
 // Tweeting every minute
 const tweetEveryMinute = async (userClient: TwitterApi) => {
     cron.schedule('*/1 * * * *', async () => {
-        console.log("Tweet every minute...");
         while(constants.listOfTweets?.length > 0) {
             await userClient.v2.tweet(constants.listOfTweets.shift()!);
         }
-        console.log("Done !");
+        // Log
+        if(constants.listOfTweets?.length > 0) {
+            console.log("Tweeting...");
+            wait(5000).then(() => console.log("Done !"));
+        }
     }).start();
 }
 
