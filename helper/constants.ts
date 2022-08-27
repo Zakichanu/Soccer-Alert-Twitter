@@ -1,3 +1,7 @@
+import { TwitterApi } from "twitter-api-v2";
+import dotenv from 'dotenv';
+dotenv.config();
+
 // Interfaces mapping json of fixtures response
 export interface fixtureResponse {
     fixture: fixture;
@@ -130,4 +134,18 @@ const laLiga = {
 // Season number
 const currentSeason: number = 2022
 
-export default { premierLeague, laLiga, currentSeason, ligue1, ucl, europaLeague, serieA, bundesliga}
+// Array of all tweets that need to be tweeted
+const listOfTweets = Array<string>();
+
+// Array of tweets of a thread
+const listOfTweetsThread = Array<string>();
+
+// Instanciate with desired auth type
+const userClient = new TwitterApi({
+    appKey: process.env.TWITTER_API_KEY!,
+    appSecret: process.env.TWITTER_API_KEY_SECRET!,
+    accessToken: process.env.TWITTER_ACCESS_TOKEN!,
+    accessSecret: process.env.TWITTER_ACCESS_TOKEN_SECRET!,
+  });
+
+export default { premierLeague, laLiga, currentSeason, ligue1, ucl, europaLeague, serieA, bundesliga, listOfTweets, listOfTweetsThread, userClient };
