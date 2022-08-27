@@ -40,7 +40,6 @@ const callLiveScore = async (matchOfTheDay: Array<fixtureResponse>, idLeague: nu
         const matchDate: Date = new Date(match.fixture.date);
         if (currentDate >= matchDate && (match.fixture.status.short === 'NS' || match.fixture.status.short === '1H' || match.fixture.status.short == 'HT' || match.fixture.status.short == '2H'
             || match.fixture.status.short == 'ET' || match.fixture.status.short == 'P' || match.fixture.status.short == 'BT')) {
-
             triggerCall = true;
             break;
         }
